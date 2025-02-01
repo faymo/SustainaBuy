@@ -7,6 +7,7 @@
     "default_icon": "icon.png"
   },
   "permissions": ["storage"],
+  "host_permissions": ["https://api.climatiq.io/*"],
   "background": {
     "service_worker": "background.js"
   },
