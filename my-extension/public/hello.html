@@ -1,12 +1,16 @@
 <!-- [hello.html](hello.html) -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <title>Chrome Extension</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SustainaBuy Extension</title>
+    <!-- Link to your compiled CSS (adjust path if needed) -->
+    <link rel="stylesheet" href="index.css" />
   </head>
-  <body>
-    <div id="root"></div>
+  <body class="bg-gray-100 font-sans text-gray-800">
+    <div id="root" class="p-6"></div>
+    <!-- Load your bundled popup script -->
     <script src="popup.js"></script>
   </body>
 </html>
