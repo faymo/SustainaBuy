@@ -11,12 +11,20 @@ const isAmazonUrl = (urlStr) => {
   }
 };
 
+// Function to open the extension popup
+const showExtensionPopup = () => {
+  chrome.action.openPopup().catch(err => {
+    console.error('Failed to open popup:', err);
+  });
+};
+
 // Check the active tab and show the popup if it's an Amazon page
 const checkActiveTab = (tabId) => {
   chrome.tabs.get(tabId, (tab) => {
     if (tab?.url && isAmazonUrl(tab.url)) {
       console.log('Amazon page detected:', tab.url);
       handleAmazonPage(tab.url);
+      showExtensionPopup();
     }
   });
 };
@@ -74,6 +82,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if (isAmazonUrl(tab.url)) {
       console.log('Amazon page detected:', tab.url);
       handleAmazonPage(tab.url);
+      showExtensionPopup();
     }
   }
 });

@@ -4,10 +4,12 @@ import AlternativeSuggestions from './components/AlternativeSuggestions';
 
 const App = () => {
   const [scrapedData, setScrapedData] = useState(null);
+  const [isAmazonPage, setIsAmazonPage] = useState(false);
 
   useEffect(() => {
     const port = chrome.runtime.connect({ name: "popup" });
     console.log("Popup connected to background script");
+
     port.onMessage.addListener((message) => {
       if (message.type === 'SCRAPER_DATA' && message.data) {
         console.log('Received scraper data:', message.data);
@@ -20,6 +22,16 @@ const App = () => {
           alternatives: [] // Assuming alternatives are not available in the scraped data
         };
         setScrapedData(formattedData);
+      }
+    });
+
+    // Check if the current tab is an Amazon page
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const activeTab = tabs[0];
+      if (activeTab && activeTab.url && activeTab.url.includes('amazon')) {
+        setIsAmazonPage(true);
+      } else {
+        setIsAmazonPage(false);
       }
     });
 
@@ -45,8 +57,14 @@ const App = () => {
         <h1 className="text-4xl font-extrabold text-green-600">SustainaBuy</h1>
       </header>
       <main className="w-full max-w-3xl bg-white shadow-lg rounded-lg p-6">
-        <ProductAnalysis product={scrapedData || defaultProduct} />
-        <AlternativeSuggestions alternatives={scrapedData?.alternatives || []} />
+        {isAmazonPage ? (
+          <>
+            <ProductAnalysis product={scrapedData || defaultProduct} />
+            <AlternativeSuggestions alternatives={scrapedData?.alternatives || []} />
+          </>
+        ) : (
+          <p className="text-lg text-gray-700">Please navigate to an Amazon product page to see the analysis.</p>
+        )}
       </main>
     </div>
   );
