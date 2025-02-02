@@ -26,9 +26,52 @@ async function scrapeAmazon(url) {
   const title = $('#productTitle').text().trim();
   const climatePledge = $('[aria-label*="Climate Pledge Friendly"]').text().trim();
 
+  // Extract mass from "Product Details" table
+  let mass = '';
+  const productDetailsTable = $('#prodDetails'); // Target the "Product Details" table
+
+  if (productDetailsTable.length > 0) {
+    // Look for the "Item Weight" row
+    const weightRow = productDetailsTable.find('th:contains("Item Weight")');
+    if (weightRow.length > 0) {
+      mass = weightRow.next('td').text().trim(); // Get the value in the next <td>
+    }
+  }
+
+  // Extract product material from "Product Details" table
+  let material = '';
+  if (productDetailsTable.length > 0) {
+    const materialRow = productDetailsTable.find('th:contains("Material")');
+    if (materialRow.length > 0) {
+      material = materialRow.next('td').text().trim();
+    }
+  }
+
+  // If material is not found in "Product Details," check "Technical Details"
+  if (!material) {
+    const technicalDetailsTable = $('#productDetails_techSpec_section_1'); // Target the "Technical Details" table
+    if (technicalDetailsTable.length > 0) {
+      const techMaterialRow = technicalDetailsTable.find('th:contains("Material")');
+      if (techMaterialRow.length > 0) {
+        material = techMaterialRow.next('td').text().trim();
+      }
+    }
+  }
+
+  // If material is still not found, check the "Product Description" section
+  if (!material) {
+    const productDescription = $('#productDescription').text().trim();
+    if (productDescription) {
+      const materialMatch = productDescription.match(/(made of|material)[\s\S]*?\./i);
+      if (materialMatch) {
+        material = materialMatch[0].trim();
+      }
+    }
+  }
+
   await browser.close();
 
-  return { title, climatePledge };
+  return { title, climatePledge, material, mass };
 }
 
 app.get('/scrape', async (req, res) => {
