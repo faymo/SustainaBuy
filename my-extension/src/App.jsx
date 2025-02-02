@@ -146,18 +146,21 @@ const App = () => {
       </header>
       <main className="w-full max-w-3xl bg-white shadow-lg rounded-lg p-6">
         {isAmazonPage ? (
-          <>
-            <ProductAnalysis product={productData || {
-              name: "Loading...",
-              carbonEmission: 0,
-              rating: 0,
-              suggestion: "Loading...",
-              climatePledge: ""
-            }} />
-            <AlternativeSuggestions alternatives={altData} />
-          </>
+          productData ? (
+            <>
+              <ProductAnalysis product={productData} />
+              <AlternativeSuggestions alternatives={altData} />
+            </>
+          ) : (
+            <div className="flex flex-col items-center py-12">
+              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-green-600"></div>
+              <p className="mt-4 text-lg text-gray-700">Loading product data...</p>
+            </div>
+          )
         ) : (
-          <p className="text-lg text-gray-700">Please navigate to an Amazon product page to see the analysis.</p>
+          <p className="text-lg text-gray-700">
+            Please navigate to an Amazon product page to see the analysis.
+          </p>
         )}
       </main>
     </div>
