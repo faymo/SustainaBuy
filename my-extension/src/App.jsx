@@ -13,9 +13,7 @@ const App = () => {
         console.log('Received scraper data:', message.data);
         const formattedData = {
           name: message.data.title,
-          description: message.data.description,
           climatePledge: message.data.climatePledge,
-          price: message.data.price || 0, // Use the scraped price or default to 0
           carbonEmission: 0, // Assuming carbon emission is not available in the scraped data
           rating: 0, // Assuming rating is not available in the scraped data
           suggestion: "No suggestions available", // Assuming suggestion is not available in the scraped data
@@ -34,11 +32,9 @@ const App = () => {
   // Provide default product data to avoid undefined errors
   const defaultProduct = {
     name: "Loading...",
-    price: 0,
     carbonEmission: 0,
     rating: 0,
     suggestion: "Loading...",
-    description: "",
     climatePledge: "",
     alternatives: []
   };

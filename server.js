@@ -20,36 +20,11 @@ async function scrapeAmazon(url) {
   const $ = cheerio.load(content);
 
   const title = $('#productTitle').text().trim();
-  const description = $('#feature-bullets ul').text().trim();
   const climatePledge = $('[aria-label*="Climate Pledge Friendly"]').text().trim();
-
-  // Try multiple selectors for the price
-  let price = $('#priceblock_ourprice').text().trim();
-  if (!price) {
-    price = $('#priceblock_dealprice').text().trim();
-  }
-  if (!price) {
-    price = $('#price_inside_buybox').text().trim();
-  }
-  if (!price) {
-    price = $('#newBuyBoxPrice').text().trim();
-  }
-  if (!price) {
-    price = $('#priceblock_saleprice').text().trim();
-  }
-  if (!price) {
-    price = $('[data-asin-price]').attr('data-asin-price');
-  }
-
-  if (!price) {
-    console.error('Price element not found.');
-  } else {
-    console.log('Price found:', price);
-  }
 
   await browser.close();
 
-  return { title, description, climatePledge, price };
+  return { title, climatePledge };
 }
 
 app.get('/scrape', async (req, res) => {
