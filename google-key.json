@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "sustain-a-buy",
+  "private_key_id": "7148bfe25745b1bb1ee15b48ae3d166a06d49630",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDCFbhvmzSdPxHx\n8NGOG6pn1XUPpuElb4kHvBCtvovUxkoZVVWUQSrSvfMZU2JI8BBNS8mrejSNse8U\nQk3oYwkjFz/mBECMIel42gi+be35UKHdahcDYkvrqGIPof5VQUJO7DtDLwgDCpcD\nYoYIc7mXAXoarPi85uRWzoW0/45xc1vZQN8EPTBr3gydaBPxzHEQuBAFDzvf/aJ9\nGfRzSCAvpaiu3PwBw/GSYVw6Fr2DV5Sbv9ZRkqMMHP1kCNG0H1ffIYYBY5t0FV0M\nKpMxXDQ5QPnh7jHmiusqNsSY+gemvU1v35hrK7NQ0ISCAihHFsf/j8SV7OBULugv\nX70YPJrLAgMBAAECggEABon0zM3N1/5n/F7AsKj99MGcUAqvSzOWykvrw+7Hh0Om\n+3OEjpojdzYvGotUpGByLCiBguV7H8r+4w/Y0BuGE0iVPoqmIhKCay/tW30Yp22w\nBmWsoNCO/kGODDjI+NZaBY6v8HOFMZUJwXNwUJiViCDknEF3n+Wni8UpfA+gHPJW\n32Zm+K1RM9Ado7mx2aTAP8gHW9ElCVratBQ7JAHbgMAlM25raRpM/LpszxWrNIvU\nCM257ZVuHKN02ZkXq2Ka4YlxQkfV1NlMbONUpbAz/XhTJAKWq/bpGiVbLMLkOIT2\nHfNm/m4MzLUU/xnTb5MISWPp6CSFGAiLsNmDpCmEAQKBgQD+Rcsa/v0HE/TU4ELF\nxuUS5BO36hPMBpF7KA3jJaRhMBkIiqnbKTyvxfAtPW35ZONz3MtKU0jrv7vmvGcs\n/ICW7d5lsILv+BS9cyGwSK4sqWtIOZZmZ3osNRxlmLFQERdLDeLu6mCCOrZWTtwE\nyzhjR78tDh5Gkiluk5dQ+Ei6EQKBgQDDZ0EVwB2f79/GIlMJJJK+HNd1VzazRQeC\nWrxj042KwPs9aGrqLTMSm1nRIXkyPSyj60Xacztf3r+GTPivVBwsDnEtzBzyXJEr\n3bNgAhalg0bIV+kbbqZrW0+NIeZIz/I5soGnb4Nlot6e386n9Y22wYfcoBr6nwx2\nqgUeey5LGwKBgQDq4JmfFE+yzBJq2cWUYAeWjaxRRR6IZsDYHMXHPyw6wm09YKlK\nUytFyvfzMj12FGWuzxPSUmCXtILjvsEn4w79XDkFgilRdb3iyokiB+EsTEtXaiqt\n6YQHdgAHMScJKOB1ahxoSYRgh8+KpknC+93Yh5vnCJWa5sTy6c7q8o5roQKBgGeV\n9yTGoW3FxcTNMWOpZbkupPFpeG/0ahSqcTAiV+h0gTt+fR8DMw3sGOMKcas2TtHe\nyTsS1yjtdm6Fo1eeqQiZ51m12KqKc9LjRlHhCYxYWU+fes22DLbgwv04OVHkGq6H\neMAAF5Hrk0R5tJ3JSITXd2R345V0dzD41JniBxp9AoGAa4AmffurSojn4EtZbo9k\nITSZiEX4j2tA6MnEqGMXIqjD2QgT3O58QK9EicdSCEeynwzOlcPA7IxSoac39VPq\nXys0VC3rlWyIS0V4VTpnvlPGm7dCfMi/9eBvWUgsqQd2g+pTuNBVPMWZhzMmW2m9\neEGvIJL2puEsYcv/SInzoM4=\n-----END PRIVATE KEY-----\n",
+  "client_email": "sustainabuy@sustain-a-buy.iam.gserviceaccount.com",
+  "client_id": "110060156110187366167",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sustainabuy%40sustain-a-buy.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
