@@ -1,73 +1,58 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProductAnalysis from './components/ProductAnalysis';
 import AlternativeSuggestions from './components/AlternativeSuggestions';
+import {GoogleGenerativeAI} from "@google/generative-ai"
+
+const GEMINI_API_KEY = 'AIzaSyDxUlWB9ZVNYr3KebXWGKTgqPDirVIeuWk'; // Replace with your actual API key
+
+const formatAlternative = (item) => ({
+  name: item.name,
+  price: item.price,
+  carbonEmission: item.carbonEmission,
+  link: item.link
+});
 
 const App = () => {
-  // State to determine if the active tab is an Amazon site
+  const [alternatives, setAlternatives] = useState([]);
   const [isAmazon, setIsAmazon] = useState(false);
-
-  // Demo product data (in a real app this would come from scraping the Amazon page)
-  const demoProduct = {
-    name: "Amazon Echo Dot (3rd Gen)",
-    price: 49.99,
-    carbonEmission: 4.2, // kg CO₂
-    rating: 2.5, // out of 5
-    suggestion: "Maybe consider alternatives with lower carbon footprint."
-  };
-
-  // Demo sustainable alternatives
-  const alternatives = [
-    {
-      name: "EcoSmart Speaker",
-      price: 39.99,
-      carbonEmission: 2.1
-    },
-    {
-      name: "GreenSound Home Assistant",
-      price: 59.99,
-      carbonEmission: 1.8
-    }
-  ];
+  const [productUrl, setProductUrl] = useState('');
 
   useEffect(() => {
-    if (chrome && chrome.tabs) {
-      // Function to check if active tab URL is Amazon
-      const checkActiveTab = () => {
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          const url = tabs && tabs[0]?.url;
-          if (url) {
-            try {
-              const parsedUrl = new URL(url);
-              setIsAmazon(parsedUrl.hostname.toLowerCase().includes('amazon'));
-            } catch (error) {
-              console.error('Error parsing URL:', error);
-            }
-          }
-        });
-      };
+    const fetchAlternatives = async (url) => {
+      try {
+        const genAI = new GoogleGenerativeAI("AIzaSyC7xUkHVXyOMoDsvKhbYHl5C2lRW0YEsvo");
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-      // Initial check on mount
-      checkActiveTab();
+        const prompt = "Explain how AI works";
 
-      // Listen for tab updates and check URL when it changes
-      const onUpdatedListener = (tabId, changeInfo, tab) => {
-        if (changeInfo.url && tab.active) {
-          try {
-            const newUrl = new URL(changeInfo.url);
-            setIsAmazon(newUrl.hostname.toLowerCase().includes('amazon'));
-          } catch (error) {
-            console.error('Error parsing updated URL:', error);
-          }
-        }
-      };
+        const result = await model.generateContent(prompt);
 
-      chrome.tabs.onUpdated.addListener(onUpdatedListener);
-      
-      // Cleanup listener on unmount
-      return () => {
-        chrome.tabs.onUpdated.removeListener(onUpdatedListener);
-      };
-    }
+        console.log(result.response.text());
+
+
+        //const response = await fetch(`https://api.gemini.com/v1/sustainable-alternatives?url=${encodeURIComponent(url)}`, {
+        //   headers: {
+        //     'Authorization': `Bearer ${GEMINI_API_KEY}`
+        //   }
+        // });
+        // const data = await response.json();
+        // const formattedAlternatives = data.map(formatAlternative);
+        // setAlternatives(formattedAlternatives);
+      } catch (error) {
+        console.error('Error fetching sustainable alternatives:', error);
+      }
+    };
+
+    // Check if the active tab is an Amazon page
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const url = tabs[0].url;
+      if (url.includes('amazon')) {
+        setIsAmazon(true);
+        setProductUrl(url);
+        // Fetch sustainable alternatives automatically
+        fetchAlternatives(url);
+      }
+    });
   }, []);
 
   return (
@@ -82,7 +67,7 @@ const App = () => {
       </header>
       {isAmazon && (
         <main className="w-full max-w-3xl bg-white shadow-lg rounded-lg p-6">
-          <ProductAnalysis product={demoProduct} />
+          <ProductAnalysis product={{ url: productUrl }} />
           <AlternativeSuggestions alternatives={alternatives} />
         </main>
       )}

@@ -13,6 +13,9 @@ const AlternativeSuggestions = ({ alternatives }) => {
             <h4 className="text-lg font-semibold text-gray-800">{alt.name}</h4>
             <p className="text-gray-600">Price: ${alt.price}</p>
             <p className="text-gray-600">CO₂ Emissions: {alt.carbonEmission} kg</p>
+            <a href={alt.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+              View on Amazon
+            </a>
           </div>
         ))}
       </div>
