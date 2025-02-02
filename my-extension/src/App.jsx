@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProductAnalysis from './components/ProductAnalysis';
 import AlternativeSuggestions from './components/AlternativeSuggestions';
-import { getSustainableAlternatives } from './Gemini_API.js';
+import { getSustainableAlternatives, getSustainabilityScore } from './Gemini_API.js';
 
 const App = () => {
   const [productData, setProductData] = useState(null);
@@ -16,14 +16,37 @@ const App = () => {
     port.onMessage.addListener((message) => {
       if (message.type === 'SCRAPER_DATA' && message.data) {
         console.log('Received scraper data:', message.data);
+        // Include mass and material from scraped data
         const formattedData = {
           name: message.data.title,
           climatePledge: message.data.climatePledge,
-          carbonEmission: 0, // Assuming carbon emission is not available in the scraped data
-          rating: 0,         // Assuming rating is not available in the scraped data
-          suggestion: "No suggestions available" // Placeholder suggestion
+          carbonEmission: 0, // Will be updated with CO₂ emissions
+          rating: 0,         // Will be updated by sustainability score
+          suggestion: "No suggestions available", // Placeholder suggestion
+          mass: message.data.mass || '',
+          material: message.data.material || ''
         };
         setProductData(formattedData);
+        console.log(formattedData.mass, formattedData.material)
+        // Use getSustainabilityScore to get the product rating from Gemini API
+        if (formattedData.mass && formattedData.material) {
+          getSustainabilityScore(formattedData.mass, formattedData.material)
+            .then((scoreText) => {
+              console.log("Gemini sustainability score response:", scoreText);
+              // Expected response example:
+              // "8.5, 3.2kg, Reasoning/explanation: ..."
+              const parts = scoreText.split(',');
+              const sustainabilityScore = parseFloat(parts[0].trim());
+              const co2Emissions = parts[1] ? parseFloat(parts[1].toLowerCase().replace('kg', '').trim()) : 0;
+              console.log('Parsed sustainability score:', sustainabilityScore, 'CO₂ Emissions:', co2Emissions);
+              setProductData(prev => ({
+                ...prev,
+                rating: sustainabilityScore,
+                carbonEmission: co2Emissions
+              }));
+            })
+            .catch((error) => console.error("Error fetching sustainability score:", error));
+        }
       }
     });
 
@@ -56,7 +79,9 @@ const App = () => {
         console.error("Empty Gemini response");
         return [];
       }
-      const blocks = safeResponse.split(/(?=Name:)/).filter(block => block && block.trim().length > 0);
+      const blocks = safeResponse.split(/(?=Name:)/).filter(
+        (block) => block && block.trim().length > 0
+      );
       if (!Array.isArray(blocks) || blocks.length === 0) {
         console.error("No alternative blocks found in the response:", safeResponse);
         return [];
@@ -65,12 +90,17 @@ const App = () => {
         const nameMatch = block.match(/Name:\s*(.*)/i);
         const priceMatch = block.match(/Price:\s*(.*)/i);
         const carbonMatch = block.match(/CarbonEmission:\s*(.*)/i);
-        const linkMatch = block.match(/Link:\s*(.*)/i);
+        // Updated regex to capture valid links and remove trailing punctuation
+        const linkMatch = block.match(/Link:\s*(https?:\/\/\S+)/i);
+        let link = linkMatch ? linkMatch[1].trim() : "";
+        if (link) {
+          link = link.replace(/[.,;:!?)]*$/, ""); // Remove any trailing punctuation or delimiters
+        }
         return {
           name: nameMatch ? nameMatch[1].trim() : "",
           price: priceMatch ? priceMatch[1].trim() : "",
           carbonEmission: carbonMatch ? carbonMatch[1].trim() : "",
-          link: linkMatch ? linkMatch[1].trim() : ""
+          link,
         };
       });
       console.log("Parsed alternatives:", alternatives);
@@ -117,7 +147,13 @@ const App = () => {
       <main className="w-full max-w-3xl bg-white shadow-lg rounded-lg p-6">
         {isAmazonPage ? (
           <>
-            <ProductAnalysis product={productData || defaultProduct} />
+            <ProductAnalysis product={productData || {
+              name: "Loading...",
+              carbonEmission: 0,
+              rating: 0,
+              suggestion: "Loading...",
+              climatePledge: ""
+            }} />
             <AlternativeSuggestions alternatives={altData} />
           </>
         ) : (
