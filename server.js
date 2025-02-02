@@ -1,9 +1,13 @@
 import express from 'express';
 import puppeteer from 'puppeteer';
 import * as cheerio from 'cheerio';
+import cors from 'cors';
 
 const app = express();
 const PORT = 3001;
+
+// Use the cors middleware
+app.use(cors());
 
 async function scrapeAmazon(url) {
   const browser = await puppeteer.launch({ headless: true });

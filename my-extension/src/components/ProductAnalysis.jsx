@@ -15,9 +15,20 @@ const ProductAnalysis = ({ product }) => {
     ratingColor = "text-yellow-600";
   }
 
+  // Function to determine font size based on title length
+  const getTitleFontSize = (title) => {
+    if (title.length > 50) {
+      return "text-lg"; // Smaller font size for long titles
+    } else if (title.length > 30) {
+      return "text-xl"; // Medium font size for medium-length titles
+    } else {
+      return "text-2xl"; // Larger font size for short titles
+    }
+  };
+
   return (
     <div className="mb-6 text-gray-600">
-      <h2 className="text-xl font-bold text-gray-800 mb-2">{product.name}</h2> {/* Adjusted font size */}
+      <h2 className={`${getTitleFontSize(product.name)} font-bold text-gray-800 mb-2`}>{product.name}</h2>
       <p className="text-gray-600">
         Estimated Carbon Emissions: {product.carbonEmission} kg CO₂
       </p>

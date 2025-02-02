@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "React Chrome Extension",
+  "name": "Sustain-a-Buy",
   "version": "1.0",
   "action": {
     "default_popup": "index.html",
