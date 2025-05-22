@@ -2,6 +2,8 @@
 
 Sustain-a-Buy is a Chrome extension designed for eco-conscious shoppers. It analyzes product pages (specifically Amazon) to provide sustainability insights, including estimated carbon emissions, a sustainability rating, and suggestions for more eco-friendly alternative products.
 
+[Devpost Link](https://devpost.com/software/sustain-a-buy)
+
 ## Features
 
 - **Product Analysis:**  
